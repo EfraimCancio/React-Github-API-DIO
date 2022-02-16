@@ -1,5 +1,6 @@
 import React from 'react';
 import * as S from './styled';
+import RepositoryItem from '../repositoryItem'
 
 const Repositories = () => {
     return (
@@ -8,8 +9,20 @@ const Repositories = () => {
                 <S.WrapperTab>Repositories</S.WrapperTab>
                 <S.WrapperTab>Starred</S.WrapperTab>
             </S.WrapperTabList>
-            <S.WrapperTabPanel>panel Repositories</S.WrapperTabPanel>
-            <S.WrapperTabPanel>panel Starred</S.WrapperTabPanel>
+            <S.WrapperTabPanel>
+                <RepositoryItem 
+                    name="Curso-HTML" 
+                    linkToRepo="https://github.com/EfraimCancio/Curso-HTML"
+                    fullName="EfraimCancio/Curso-HTML"
+                />
+            </S.WrapperTabPanel>
+            <S.WrapperTabPanel>
+                <RepositoryItem
+                    name="Curso-JS" 
+                    linkToRepo="https://github.com/EfraimCancio/Curso-JS"
+                    fullName="EfraimCancio/Curso-JS"
+                />
+            </S.WrapperTabPanel>
         </S.WrapperTabs>
     );
 };

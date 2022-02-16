@@ -16,18 +16,22 @@ export const WrapperTabList = styled(TabList)`
 WrapperTabList.tabsRole = "TabList";
 
 export const WrapperTab = styled(Tab)`
-  border-radius: 16px;
+  border-radius: 5px;
   border: 1px solid #ccc;
   padding: 16px;
+  font-weight: bold;
+  font-size: 16px;
   user-select: none;
   cursor: pointer;
   z-index: 99999;
-  background-color: "#fff";
+  background-color: #ccc;
   margin: 10px;
   &:focus {
     outline: none;
   }
   &.is-selected {
+    background-color: black;
+    color: #ccc;
     box-shadow: 3px 2px 10px rgba(0, 0, 0, 0.2);
   }
 `;
