@@ -2,7 +2,7 @@ import React, { createContext, useCallback, useState } from 'react';
 import api from '../servises/api'
 
 export const GithubContext = createContext({
-    login: undefined,
+    login: false,
     user:{},
     repositories: [],
     started: [],
@@ -11,11 +11,12 @@ export const GithubContext = createContext({
 const GithubProvider = ({children}) => {
 
     const [githubState, setGithubState] = useState({
-        
+       
+        hasUser: false,
         loading: false,
         user:{
             login: undefined,
-            name: 'Efraim',
+            name: undefined,
             html_url: undefined,
             blog: undefined,
             company: undefined,
@@ -30,9 +31,14 @@ const GithubProvider = ({children}) => {
     });
 
     const getUser = (username) => {
-        api.get(`users/${username}`).then( ( {data: {user}}) => {
-            setGithubState( (prevState) => ({
+        setGithubState((prevState) => ({
+            ... prevState,
+            loading: !prevState.loading,
+        }));
+        api.get(`users/${username}`).then(({ data }) => {
+            setGithubState((prevState) => ({
                 ...prevState,
+                hasUser: true,
                 user: {
                     login: user.login,
                     name: user.name,
@@ -46,7 +52,12 @@ const GithubProvider = ({children}) => {
                     public_repos: user.public_repos,
                 },
             }));
-        } );
+        } ).finally( () => {
+            setGithubState((prevState) => ({
+                ... prevState,
+                loading: !prevState.loading,
+            }));
+        })
     };
 
     const contextValue = {
