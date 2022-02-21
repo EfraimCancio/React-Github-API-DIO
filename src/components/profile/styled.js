@@ -26,7 +26,7 @@ export const WrapperInfoUser = styled.div`
     }
 `;
 
-export const WrapperStatusGeneric = styled.div`
+export const WrapperStatusCount = styled.div`
     display: flex;
     align-items: center;
     div {
@@ -35,7 +35,7 @@ export const WrapperStatusGeneric = styled.div`
     }
 `;
 
-export const WrapperUserName = styled.div`
+export const WrapperUserGeneric = styled.div`
     display: flex;
     align-items: center;
     margin-top: 10px;

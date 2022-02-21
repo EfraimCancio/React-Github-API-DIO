@@ -1,5 +1,5 @@
 import React, { createContext, useCallback, useState } from 'react';
-import api from '../servises/api'
+import api from '../servises/api';
 
 export const GithubContext = createContext({
     login: false,
@@ -15,6 +15,8 @@ const GithubProvider = ({children}) => {
         hasUser: false,
         loading: false,
         user:{
+            id: undefined,
+            avatar: undefined,
             login: undefined,
             name: undefined,
             html_url: undefined,
@@ -32,38 +34,65 @@ const GithubProvider = ({children}) => {
 
     const getUser = (username) => {
         setGithubState((prevState) => ({
-            ... prevState,
-            loading: !prevState.loading,
+          ...prevState,
+          loading: !prevState.loading,
         }));
-        api.get(`users/${username}`).then(({ data }) => {
+    
+        api
+          .get(`users/${username}`)
+          .then(({ data }) => {
             setGithubState((prevState) => ({
-                ...prevState,
-                hasUser: true,
-                user: {
-                    login: user.login,
-                    name: user.name,
-                    html_url: user.html_url,
-                    blog: user.blog,
-                    company: user.company,
-                    location: user.location,
-                    follower: user.follower,
-                    following: user.following,
-                    public_gists:user.public_gists,
-                    public_repos: user.public_repos,
-                },
+              ...prevState,
+              hasUser: true,
+              user: {
+                id: data.id,
+                avatar: data.avatar_url,
+                login: data.login,
+                name: data.name,
+                html_url: data.html_url,
+                blog: data.blog,
+                company: data.company,
+                location: data.location,
+                followers: data.followers,
+                following: data.following,
+                public_gists: data.public_gists,
+                public_repos: data.public_repos,
+              },
             }));
-        } ).finally( () => {
+          })
+          .finally(() => {
             setGithubState((prevState) => ({
-                ... prevState,
-                loading: !prevState.loading,
+              ...prevState,
+              loading: !prevState.loading,
             }));
-        })
+        });
     };
+
+    const getUserRepos = (username) => {
+        api.get(`users/${username}/repos`).then(({ data }) => {
+          console.log("data: " + JSON.stringify(data));
+          setGithubState((prevState) => ({
+            ...prevState,
+            repositories: data,
+          }));
+        });
+    };
+    
+    const getUserStarred = (username) => {
+        api.get(`users/${username}/starred`).then(({ data }) => {
+          console.log("data: " + JSON.stringify(data));
+          setGithubState((prevState) => ({
+            ...prevState,
+            starred: data,
+          }));
+        });
+    };  
 
     const contextValue = {
         githubState,
         getUser: useCallback((username) => getUser(username), []),
-
+        getUserRepos: useCallback((username) => getUserRepos(), []),
+        getUserStarred: useCallback((username) => getUserStarred(username), []),
     };
 
     return (
